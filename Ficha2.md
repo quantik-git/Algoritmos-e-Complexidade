@@ -56,3 +56,47 @@ int maxSoma (int v[], int N) {
 **melhor caso:** array por ordem decrescente  
 **pior caso:** array por ordem crescente  
 nº = comprimento dos segmentos crescentes
+
+
+# 2 Definições Recursivas
+## 1.
+a) T(n) = k + T(n-1)
+sum_{0 <= i < n} k + k' 
+b)
+sum_{0 <= i < log_2(n)} 2^i * k + k'
+c)
+(sum_{0 <= i < log_2(n)} 2^i) * k + 2^(log_2(n)) * k'
+d) T(n) = n + T(n-1)
+sum_{0 <= i < n} n + k' = n^2/2 + n/2 + k'
+e)
+(sum_{0 <= i < log_2(n)} n/2^i) + k'
+f)
+(sum_{0 <= i < log_2(n)} n/2^i) + 2^(log_2(n)+1) * k'
+O(n * log_2(n))
+
+## 2.
+T(0) = 0
+T(n) = n + T(n-1)
+n^2/2 + n/2
+
+## 3.
+T(0) = 0
+T(n) = k + 2 * T(n-1)
+sum_{0 <= i < n} 2^i = 2^n -1
+
+## 4.
+T(0) = k
+T(n) = k' + 2 * n + 2 * T(n/2)
+O(n * log_2(n))
+
+## 5.
+1)
+T(0) = k
+T(n) = k' + 2 * T(n/2)
+2)
+T(0) = k
+T(n) = k' + T(n-1) + T(0)
+
+
+# 3 Análise de caso médio
+## 1.
