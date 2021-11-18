@@ -100,3 +100,16 @@ T(n) = k' + T(n-1) + T(0)
 
 # 3 Análise de caso médio
 ## 1.
+nº médio de comparações = (N-1) * (1/2)^(N-1) + sum_{0 < i < N} i * (1/2)^i  
+
+maxcresc = sum_{0 <= i <= N-2} 2 - 1/(2^(N-i-2)
+
+## 3.
+N * (1/2)^N + sum_{1 <= i <= N} i * (1/2)^i
+
+## 4.
+N * (1/2)^N + sum_{1 <= i <= N} i * (1/2)^i
+
+## 5.
+
+
