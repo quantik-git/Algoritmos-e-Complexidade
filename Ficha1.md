@@ -13,17 +13,17 @@ a)
 pré: True  
 pós: `r == x*y`  
 b)  
-pré: ?
+pré: True
 pós: `(x % r == 0 && y % r == 0) && nexists_{r < i < inf} x % i == 0 && y % i == 0`  
 c)  
-pré: True  
+pré: N >= 0  
 pós: `r == sum_{0 <= i < N} v[i]`  
 d)  
-pré: ?
-pós: `forall_{1 <= i < r} v[i-1] < v[i]`  
+pré: N >= 0
+pós: `(N == 0 && r == 0) || (forall_{1 <= i < r} v[i-1] < v[i] && v[r] > v[r-1])`  
 e)  
-pré: ?
-pós: `r == forall_{1 <= i < N} v[i-1] < v[i]`  
+pré: N >= 0
+pós: `forall_{1 <= i < N} v[i-1] < v[i]`  
 
 # 2 Correção
 ## 1.
@@ -60,9 +60,57 @@ a)
 | a * b == x * y | &#10004; | &#x274C; | &#10004; | &#x274C; |
 | a * b + r == x * y | &#10004; | &#10004; | &#10004; | &#10004; |
 
-b) `a * b + r == x * y && a >= 0`  
+b) `a * b + r == x * y && a >= 0`   
 
 ## 2.
+Estes invariantes não devem ser fortes o suficiente para provar mas são a parte mais importante  
+a) `0 <= r < i && (forall_{0 <= k < i} v[r] <= v[i])`  
 
+b) `(exists_{0 <= r < i} r == v[p]) && (forall_{0 <= k < i} v[r] <= v[i])`  
+
+c) `r == sum_{0 <= k < i} v[k]`  
+
+d) `a * b + r = x^2`  
+
+e) `r == i^2`  
+
+f) `forall_{1 <= i < r} v[i-1] < v[i]`  
+
+g) `(p == -1 && forall_{0 <= k < i} a[k] != x) || ((0 <= p < i) && x == a[p])`  
+não sei se esta é mais útil `(p == -1 && forall_{0 <= k < i} a[k] != x) || (p == i-1 && x == a[p])`  
+
+h) `r == (i-1) * i / 2`  
+
+i) `n * (n+1) / 2 == (i * (i+1) / 2) + r`  
+
+j) `exists_{q} x == q*y + r`  
+
+k) `r == sum_{0 <= k < i} x^k * coef[k]`  
+
+l) `r == sum_{i <= k < N} x^k * coef[k]`  
 
 ## 3.
+Estes variantes não devem ser fortes o suficiente para provar mas são a parte mais importante  
+a) `N-i`  
+
+b) `N-i`  
+
+c) `N-i`  
+
+d) `a` ???  
+
+e) `x-i`  
+
+f) `N-r`  
+
+g) `N-i`  
+
+h) `n-i+1`  
+
+i) `i`  
+
+j) `r - (x % y)` ???  
+
+k) `N-i`  
+
+l) `i` 
