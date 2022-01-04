@@ -120,7 +120,7 @@ unsigned hash(char *str){
   while (c = *str++)
     hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
   
-  return hash;
+  return hash % Size; // alterado aqui por conveniência
 }
 ```
 
@@ -136,7 +136,7 @@ typedef struct nodo {
 } Nodo, *THash [Size];
 ```
 
-## 1
+## 1.
 ```c
 void initEmpty (THash t) {
   for (int i = 0; i < Size; i++)
@@ -144,7 +144,7 @@ void initEmpty (THash t) {
 }
 ```
 
-## 2
+## 2.
 ```c
 void add (char *s, THash t) {
   unsigned hashed = hash(s);
@@ -171,7 +171,7 @@ void add (char *s, THash t) {
 }
 ```
 
-## 3
+## 3.
 ```c
 int lookup (char *s, THash t) {
   unsigned hashed = hash(s);
@@ -184,7 +184,7 @@ int lookup (char *s, THash t) {
 }
 ```
 
-## 4
+## 4.
 ```c
 int remove (char *s, THash t) {
   unsigned hashed = hash(s);
@@ -219,6 +219,140 @@ int remove (char *s, THash t) {
 
 typedef struct bucket {
   int status; // Free | Used | Del
-  char *chave; int ocorr;
+  char *chave;
+  int ocorr;
 } THash [Size];
+```
+
+## 1.
+```c
+int where (char *s, THash t) {
+  int c, hash = 5381;
+
+  while (c = *str++)
+    hash *= 33 + c;
+
+  return hash % Size;
+}
+```
+
+## 2.
+```c
+// a)
+void initEmpty(THash t) {
+  for (int i; i < Size; i++) {
+    t[i].status = Free;
+    t[i].chave = NULL;
+    t[i].ocorr = 0;
+  }
+}
+
+// b)
+void add (char *s, THash t) {
+  int i, pos, hashed;
+  pos = hashed = where(s);
+
+  for (i = 1; t[pos].status > Free && i <= Size; i++) {
+    if(!strcmp(t[pos].chave, s)) {
+      (t[pos].ocorr)++;
+      return;
+    }
+
+    pos = (hashed+i) % Size;
+  }
+
+  if (t[pos].status == Free) {
+    t[pos].status = Used;
+    strcpy(t[pos].chave, s);
+    t[pos].ocorr = 1;
+  } else {
+    printf("
+      Erro na inserção:\n
+      Table cheia ou a precisar de garbage collection\n
+    ");
+  }
+}
+
+// c)
+int lookup (char *s, THash t) {
+  int i, pos, hashed;
+  pos = hashed = where(s);
+  
+  for (i = 1; t[pos].status > Free && i <= Size; i++) {
+    if(!strcmp(t[pos].chave, s)) {
+      return t[pos].ocorr;
+    }
+
+    pos = (hashed+i) % Size;
+  }
+  
+  return -1;
+}
+
+// d)
+int remove (char *s, THash t) {
+  int i, pos, hashed;
+  pos = hashed = where(s);
+
+  for (i = 1; strcmp(t[pos].chave, s); i++) {
+    if(t[pos].status == Free || i == Size)
+      return 1;
+
+    pos = (hashed+i) % Size;
+  }
+
+  (t[pos].ocorr)--;
+
+  if (t[pos].ocorr == 0) {
+    t[pos].status = Del;
+    t[pos].chave = NULL;
+  }
+
+  return 0;
+}
+```
+
+## 3.
+```c
+void copy (char *s, int ocorr, THash t) {
+  int i;
+
+  for (i = where(s); t[i].status == Used; i = (i+1) % Size);
+
+  t[i].status = Used;
+  strcpy(t[i].chave, s);
+  t[i].ocorr = ocorr;
+}
+
+int garb_collection (THash t) {
+  char *keys[Size];
+  int i, c = 0, ocorrs[Size];
+
+  for(i = 0; i < Size; i++)
+    if (t[i].status == Used) {
+      strcpy(keys[c], t[i].chave);
+      ocorrs[c] = t[i].ocorr;
+      c++;
+    }
+
+  initEmpty(t);
+
+  for (i = 0; i < c; i++) {
+    copy(keys[i], ocorrs[i], t);
+  }
+
+  return 0;
+}
+```
+
+## 4.
+```c
+typedef struct bucket {
+  int status; // Free | Used | Del
+  char *chave;
+  int ocorr;
+  int colided;
+} THash [Size];
+
+// Não percebo pelo enunciado qual é a forma que devemos contar as colisões
 ```
