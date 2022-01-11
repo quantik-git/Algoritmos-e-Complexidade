@@ -77,13 +77,13 @@ int remove (PriorityQueue *q, int *rem) {
 // top-down
 void heapify (int v[], int N) {
   for (int i = 1; i < N; i++)
-    bubbleUp (i, q->valores);
+    bubbleUp (i, v);
 }
 
 // bottom-up
 void heapify (int v[], int N) {
   for(int i = parent(N-1); i >= 0; i--)
-    bubbleDown(i, q->valores, N);
+    bubbleDown(i, v, N);
 }
 
 // falta determinar complexidade
